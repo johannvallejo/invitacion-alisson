@@ -58,6 +58,25 @@ export default function App() {
     const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+    const ACCESS_CODE = "ALISSON15";
+  const [accessCode, setAccessCode] = useState("");
+  const [hasAccess, setHasAccess] = useState(
+  sessionStorage.getItem("invitationAccess") === "true"
+);
+  const [accessError, setAccessError] = useState("");
+
+  const handleAccessSubmit = (event) => {
+    event.preventDefault();
+
+    if (accessCode.trim().toUpperCase() === ACCESS_CODE) {
+      sessionStorage.setItem("invitationAccess", "true");
+      setHasAccess(true);
+      setAccessError("");
+    } else {
+      setAccessError("Oh que pena, otro día será.");
+    }
+  };
+
   const handleToggleMusic = async () => {
     if (!audioRef.current) return;
 
@@ -73,6 +92,50 @@ export default function App() {
       console.error("No se pudo reproducir el audio:", error);
     }
   };
+
+    if (!hasAccess) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-[#6E1F2D] via-[#7D2636] to-[#2B1A1E] px-5 py-10 flex items-center justify-center text-white">
+        <div className="w-full max-w-md rounded-[2rem] bg-[#FFF9F6]/95 p-8 text-center text-[#2B1A1E] shadow-2xl border border-white/50">
+          <p className="uppercase tracking-[0.35em] text-xs mb-4 text-[#6E1F2D]">
+            Invitación privada
+          </p>
+
+          <h1 className="text-4xl font-serif mb-4">
+            Acceso a la invitación
+          </h1>
+
+          <p className="text-sm leading-relaxed opacity-75 mb-7">
+            Introduce el código de acceso para ver todos los detalles del evento.
+          </p>
+
+          <form onSubmit={handleAccessSubmit} className="space-y-4">
+            <input
+              type="text"
+              value={accessCode}
+              onChange={(event) => setAccessCode(event.target.value)}
+              placeholder="Código de acceso"
+              className="w-full rounded-full border border-[#EAD7D2] bg-white px-5 py-3 text-center text-sm outline-none focus:border-[#6E1F2D]"
+            />
+
+            {accessError && (
+              <p className="text-sm text-[#6E1F2D]">
+                {accessError}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full rounded-full bg-[#6E1F2D] px-6 py-3 text-sm font-medium text-white shadow-lg transition active:scale-95"
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="bg-[#F8F1ED] text-[#2B1A1E] overflow-hidden">
             <audio ref={audioRef} src={audioFile} loop preload="auto" />
