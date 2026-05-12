@@ -1,8 +1,11 @@
-import { useRef, useState } from "react";
-import { CalendarDays, Gift, MapPin, Music, Pause, Play, Shirt, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { CalendarDays, Mail, MapPin, Music, Pause, Play, Shirt, Sparkles } from "lucide-react";
 import { invitation, getWhatsAppUrl } from "./data/invitationData";
 import Reveal from "./components/Reveal";
 import mainPhoto from "./assets/alisson-main.jpg";
+import alisson2Photo from "./assets/alisson2.jpg";
+import alisson3Photo from "./assets/alisson3.jpg";
+import alisson4Photo from "./assets/alisson4.jpg";
 import audioFile from "./assets/alisson-song.mp3";
 import "./index.css";
 
@@ -40,14 +43,64 @@ function Card({ children, className = "" }) {
 }
 
 function Countdown() {
+  const calculateTimeLeft = () => {
+    const targetDate = new Date(invitation.date).getTime();
+    const now = new Date().getTime();
+    const difference = targetDate - now;
+
+    if (difference <= 0 || Number.isNaN(difference)) {
+      return {
+        days: "00",
+        hours: "00",
+        minutes: "00",
+        seconds: "00",
+      };
+    }
+
+    return {
+      days: String(Math.floor(difference / (1000 * 60 * 60 * 24))).padStart(
+        2,
+        "0"
+      ),
+      hours: String(
+        Math.floor((difference / (1000 * 60 * 60)) % 24)
+      ).padStart(2, "0"),
+      minutes: String(Math.floor((difference / 1000 / 60) % 60)).padStart(
+        2,
+        "0"
+      ),
+      seconds: String(Math.floor((difference / 1000) % 60)).padStart(2, "0"),
+    };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const items = [
+    { label: "Días", value: timeLeft.days },
+    { label: "Horas", value: timeLeft.hours },
+    { label: "Min", value: timeLeft.minutes },
+    { label: "Seg", value: timeLeft.seconds },
+  ];
+
   return (
-    <div className="grid grid-cols-4 gap-2 text-center">
-      {["Días", "Horas", "Min", "Seg"].map((label) => (
-        <div key={label} className="rounded-2xl bg-[#6E1F2D] text-white py-4">
-          <div className="text-2xl font-semibold">00</div>
-          <div className="text-[11px] uppercase tracking-widest opacity-80">
-            {label}
-          </div>
+    <div className="grid grid-cols-4 gap-3">
+      {items.map((item) => (
+        <div
+          key={item.label}
+          className="rounded-2xl bg-[#6E1F2D] px-3 py-5 text-center text-white shadow-lg"
+        >
+          <p className="text-3xl font-bold leading-none">{item.value}</p>
+          <p className="mt-2 text-xs uppercase tracking-[0.18em] opacity-80">
+            {item.label}
+          </p>
         </div>
       ))}
     </div>
@@ -208,7 +261,7 @@ export default function App() {
         <Reveal>
           <div className="text-center">
             <Sparkles className="mx-auto mb-5 text-[#D8B36A]" size={34} />
-            <h2 className="text-3xl font-serif mb-6">Una noche especial</h2>
+            <h2 className="text-3xl font-serif mb-6">Una día especial</h2>
             <p className="text-base leading-8 opacity-90">
               {invitation.welcomeText}
             </p>
@@ -223,17 +276,26 @@ export default function App() {
         height={120}
       />
 
-      <Section>
-        <Reveal>
-          <Card className="text-center">
-            <h2 className="text-3xl font-serif mb-3">Falta poco</h2>
-            <p className="text-sm opacity-70 mb-6">
-              Para celebrar este día tan especial
-            </p>
-            <Countdown />
-          </Card>
-        </Reveal>
-      </Section>
+      <section className="relative min-h-screen overflow-hidden px-5 py-16 flex items-center justify-center text-[#2B1A1E]">
+          <div
+            className="absolute inset-0 bg-cover bg-center scale-105"
+            style={{ backgroundImage: `url(${alisson2Photo})` }}
+          />
+          <div className="absolute inset-0 bg-[#6E1F2D]/65" />
+          <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#F8F1ED] via-[#F8F1ED]/70 to-transparent pointer-events-none z-20" />
+          <div className="absolute bottom-0 left-0 right-0 h-[24rem] bg-gradient-to-b from-transparent via-[#EAD7D2]/45 to-[#F8F1ED] pointer-events-none z-20" />
+          <div className="relative z-30 w-full max-w-md mx-auto">
+            <Reveal>
+              <Card className="text-center">
+                <h2 className="text-3xl font-serif mb-3">Falta poco</h2>
+                <p className="text-sm opacity-70 mb-6">
+                  Para celebrar este día tan especial
+                </p>
+                <Countdown />
+              </Card>
+            </Reveal>
+          </div>
+        </section>
 
       <SoftTransition
         from="#F8F1ED"
@@ -281,20 +343,28 @@ export default function App() {
         to="#F8F1ED"
         height={120}
       />
-      <Section>
-        <Reveal>
-          <Card className="text-center">
-            <Shirt className="mx-auto mb-4 text-[#6E1F2D]" size={34} />
-            <h2 className="text-3xl font-serif mb-4">Código de vestimenta</h2>
-            <p className="text-xl text-[#6E1F2D] font-semibold">
-              {invitation.dressCode}
-            </p>
-            <p className="mt-4 text-sm opacity-70 leading-relaxed">
-              Te invitamos a vestir de forma elegante para acompañar la temática
-              de la celebración.
-            </p>
-          </Card>
-        </Reveal>
+     <Section className="relative min-h-screen overflow-hidden px-5 py-16 flex items-center justify-center text-[#2B1A1E]">
+        <div
+          className="absolute inset-0 bg-cover bg-center scale-105"
+          style={{ backgroundImage: `url(${alisson3Photo})` }}
+        />
+        <div className="absolute inset-0 bg-[#6E1F2D]/65" />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#F8F1ED] via-[#F8F1ED]/70 to-transparent pointer-events-none z-20" />
+        <div className="absolute bottom-0 left-0 right-0 h-[24rem] bg-gradient-to-b from-transparent via-[#EAD7D2]/45 to-[#F8F1ED] pointer-events-none z-20" />
+        <div className="relative z-30 w-full max-w-md mx-auto">
+          <Reveal>
+            <Card className="text-center">
+              <Shirt className="mx-auto mb-4 text-[#6E1F2D]" size={34} />
+              <h2 className="text-3xl font-serif mb-4">Código de vestimenta</h2>
+              <p className="text-xl text-[#6E1F2D] font-semibold">
+                {invitation.dressCode}
+              </p>
+              <p className="mt-4 text-sm opacity-70 leading-relaxed">
+                {invitation.dressCodeNote}
+              </p>
+            </Card>
+          </Reveal>
+        </div>
       </Section>
 
       <SoftTransition
@@ -321,18 +391,22 @@ export default function App() {
                 Confirma tu asistencia
               </h2>
               <p className="text-sm opacity-75 leading-relaxed mb-7">
-                Será un honor contar contigo en esta celebración. Confirma tu
-                asistencia por WhatsApp.
+                {invitation.attendanceText}
               </p>
 
-              <a
-                href={getWhatsAppUrl()}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-block rounded-full bg-[#6E1F2D] text-white px-7 py-3 text-sm"
-              >
-                Confirmar por WhatsApp
-              </a>
+              <div className="flex flex-col gap-3">
+                {invitation.whatsappContacts.map((contact) => (
+                  <a
+                    key={contact.number}
+                    href={getWhatsAppUrl(contact.number)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block rounded-full bg-[#6E1F2D] text-white px-7 py-3 text-sm"
+                  >
+                    Confirmar con {contact.name}
+                  </a>
+                ))}
+              </div>
             </Card>
           </Reveal>
         </div>
@@ -341,11 +415,14 @@ export default function App() {
       <Section>
         <Reveal>
           <Card className="text-center">
-            <Gift className="mx-auto mb-4 text-[#6E1F2D]" size={34} />
+            <Mail className="mx-auto mb-4 text-[#6E1F2D]" size={34} />
             <h2 className="text-3xl font-serif mb-4">Regalos</h2>
-            <p className="text-sm opacity-75 leading-7">
-              {invitation.giftsText}
-            </p>
+              <p className="text-sm opacity-75 leading-7 mb-3">
+                {invitation.giftsText}
+              </p>
+              <p className="text-xl text-[#6E1F2D] font-semibold">
+                {invitation.giftsHighlight}
+              </p>
           </Card>
         </Reveal>
       </Section>
@@ -357,19 +434,30 @@ export default function App() {
         height={120}
       />
 
-      <Section className="bg-gradient-to-b from-[#6E1F2D] via-[#7D2636] to-[#2B1A1E] text-white">
-        <Reveal>
-          <div className="text-center">
-            <p className="uppercase tracking-[0.35em] text-xs mb-5 opacity-80">
-              Gracias por acompañarme
-            </p>
-            <h2 className="text-5xl font-serif mb-5">{invitation.mainName}</h2>
-            <p className="text-sm opacity-80">
-              Te espero para celebrar una noche inolvidable.
-            </p>
-          </div>
-        </Reveal>
-      </Section>
+      <section className="relative min-h-screen overflow-hidden px-5 py-16 flex items-center justify-center text-white">
+        <div
+          className="absolute inset-0 bg-cover bg-center scale-105"
+          style={{ backgroundImage: `url(${alisson4Photo})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2B1A1E]/70 via-[#6E1F2D]/70 to-[#2B1A1E]/85" />
+        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#6E1F2D] via-[#6E1F2D]/50 to-transparent pointer-events-none z-20" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-transparent via-[#2B1A1E]/70 to-[#2B1A1E] pointer-events-none z-20" />
+        <div className="relative z-30 w-full max-w-md mx-auto text-center">
+          <Reveal>
+            <div>
+              <p className="uppercase tracking-[0.35em] text-xs mb-5 opacity-80">
+                Gracias por acompañarme
+              </p>
+              <h2 className="text-5xl font-serif mb-5">
+                {invitation.mainName}
+              </h2>
+              <p className="text-sm opacity-80">
+                Te espero para celebrar un día inolvidable.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </main>
   );
 }

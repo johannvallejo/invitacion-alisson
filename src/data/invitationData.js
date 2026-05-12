@@ -1,30 +1,48 @@
 export const invitation = {
-  eventName: "15 Años de Alisson",
-  eventType: "Fiesta elegante de 15 años",
+  eventName: "Mis XV años",
+  eventType: "Fiesta elegante de XV años",
   mainName: "Alisson",
 
-  date: "2026-07-04T18:00:00",
-  displayDate: "4 de julio",
-  time: "Pendiente de confirmar",
+  date: "2026-07-04T17:00:00+01:00",
+  displayDate: "04.07.2026",
+  time: "17:00",
 
-  locationName: "Pendiente de confirmar",
-  address: "Pendiente de confirmar",
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=London%2C%20United%20Kingdom",
+  locationName: "Palm Tree Banqueting",
+  address: "329 Romford Rd, London E7 9HA",
+  mapsUrl:
+    "https://www.google.com/maps/search/?api=1&query=329%20Romford%20Rd%2C%20London%20E7%209HA",
 
-  whatsappNumber: "447727013331",
+  whatsappContacts: [
+    {
+      name: "Verónica",
+      number: "447727013331",
+    },
+    {
+      name: "Víctor",
+      number: "447480171772",
+    },
+  ],
+
   whatsappText:
-    "Hola, confirmo mi asistencia a los 15 Años de Alisson. Mi nombre es: ",
+    "Hola, confirmo mi asistencia a los XV años de Alisson. Mi nombre es: ",
 
-  dressCode: "Elegante",
+  dressCode: "Formal",
+  dressCodeNote:
+    "Por favor evitar usar tonos rosa, blanco y dorado, ya que son parte especial de mi vestimenta.",
 
   welcomeText:
-    "Hay momentos que se viven una sola vez y se guardan para siempre en el corazón. Me encantaría compartir contigo una noche muy especial, llena de ilusión, alegría y recuerdos inolvidables. Te espero para celebrar mis 15 años.",
+    "Hay momentos inolvidables que se conservan en el corazón para siempre, por esta razón con la bendición de Dios y de mis padres quiero que compartas conmigo este día tan especial.",
+
+  attendanceText:
+    "¡Quiero compartir este momento tan esperado contigo! Por favor ayúdanos confirmando tu asistencia.",
 
   giftsText:
-    "Tu presencia es el mejor regalo. Si deseas tener un detalle conmigo, podrás hacerlo el día del evento con mucho cariño.",
+    "¡Gracias por formar parte de este gran día!",
+
+  giftsHighlight: "Lluvia de sobres",
 
   songUrl: "",
-  songTitle: "Canción pendiente por elegir",
+  songTitle: "Canción especial",
 
   colors: {
     primary: "#6E1F2D",
@@ -36,8 +54,8 @@ export const invitation = {
   },
 };
 
-export function getWhatsAppUrl() {
-  return `https://wa.me/${invitation.whatsappNumber}?text=${encodeURIComponent(
+export function getWhatsAppUrl(number) {
+  return `https://wa.me/${number}?text=${encodeURIComponent(
     invitation.whatsappText
   )}`;
 }
