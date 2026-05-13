@@ -9,6 +9,108 @@ import alisson4Photo from "./assets/alisson4.jpg";
 import audioFile from "./assets/alisson-song.mp3";
 import "./index.css";
 
+const translations = {
+  es: {
+    languageSpanish: "Español",
+    languageEnglish: "English",
+
+    invited: "Estás invitado/a",
+    playTitle: "¡Dale Play y desliza!",
+    playText: "Escucha mi canción favorita.",
+
+    specialDayTitle: "Un día especial",
+    specialDayText:
+      "Hay momentos inolvidables que se conservan en el corazón para siempre, por esta razón con la bendición de Dios y de mis padres quiero que compartas conmigo este día tan especial.",
+
+    countdownTitle: "Falta poco",
+    countdownText: "Para celebrar este día tan especial",
+    days: "Días",
+    hours: "Horas",
+    minutes: "Min",
+    seconds: "Seg",
+
+    whenWhereTitle: "Cuándo y dónde",
+    date: "Fecha",
+    time: "Hora",
+    place: "Lugar",
+    address: "Dirección",
+    viewLocation: "Ver ubicación",
+
+    dressCodeTitle: "Código de vestimenta",
+    dressCodeNote:
+      "Por favor evitar usar tonos rosa, blanco y dorado, ya que son parte especial de mi vestimenta.",
+
+    confirmTitle: "Confirma tu asistencia",
+    confirmText:
+      "¡Quiero compartir este momento tan esperado contigo! Por favor ayúdanos confirmando tu asistencia.",
+    confirmWith: "Confirmar con",
+
+    giftsTitle: "Regalos",
+    giftsText: "¡Gracias por formar parte de este gran día!",
+    giftsHighlight: "Lluvia de sobres",
+
+    finalThanks: "Gracias por acompañarme",
+    finalText: "Te espero para celebrar un día inolvidable.",
+
+    accessPrivate: "Invitación privada",
+    accessTitle: "Acceso a la invitación",
+    accessText:
+      "Introduce el código de acceso para ver todos los detalles del evento.",
+    accessPlaceholder: "Código de acceso",
+    accessButton: "Entrar",
+    accessError: "Código incorrecto. Inténtalo de nuevo.",
+  },
+
+  en: {
+    languageSpanish: "Español",
+    languageEnglish: "English",
+
+    invited: "You are invited",
+    playTitle: "Press play and scroll!",
+    playText: "Listen to my favourite song.",
+
+    specialDayTitle: "A special day",
+    specialDayText:
+      "There are unforgettable moments that stay in our hearts forever. For this reason, with God’s blessing and my parents’ love, I would be honoured to share this very special day with you.",
+
+    countdownTitle: "Not long to go",
+    countdownText: "To celebrate this very special day",
+    days: "Days",
+    hours: "Hours",
+    minutes: "Min",
+    seconds: "Sec",
+
+    whenWhereTitle: "When and where",
+    date: "Date",
+    time: "Time",
+    place: "Venue",
+    address: "Address",
+    viewLocation: "View location",
+
+    dressCodeTitle: "Dress code",
+    dressCodeNote:
+      "Please avoid wearing pink, white and gold tones, as they are a special part of my outfit.",
+
+    confirmTitle: "Confirm your attendance",
+    confirmText:
+      "I would love to share this long-awaited moment with you! Please help us by confirming your attendance.",
+    confirmWith: "Confirm with",
+
+    giftsTitle: "Gifts",
+    giftsText: "Thank you for being part of this special day!",
+    giftsHighlight: "Envelope gifts",
+
+    finalThanks: "Thank you for joining me",
+    finalText: "I look forward to celebrating an unforgettable day with you.",
+
+    accessPrivate: "Private invitation",
+    accessTitle: "Invitation access",
+    accessText: "Enter the access code to view all the event details.",
+    accessPlaceholder: "Access code",
+    accessButton: "Enter",
+    accessError: "Incorrect code. Please try again.",
+  },
+};
 function Section({ children, className = "" }) {
   return (
     <section
@@ -110,6 +212,8 @@ function Countdown() {
 export default function App() {
     const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+    const [language, setLanguage] = useState("es");
+  const t = translations[language];
 
     const ACCESS_CODE = "ALISSON15";
   const [accessCode, setAccessCode] = useState("");
@@ -126,7 +230,7 @@ export default function App() {
       setHasAccess(true);
       setAccessError("");
     } else {
-      setAccessError("Oh que pena, otro día será.");
+      setAccessError(t.accessError);
     }
   };
 
@@ -193,6 +297,27 @@ export default function App() {
     <main className="bg-[#F8F1ED] text-[#2B1A1E] overflow-hidden">
             <audio ref={audioRef} src={audioFile} loop preload="auto" />
       <Section className="relative min-h-screen overflow-hidden px-5 py-16 flex items-center justify-center text-white">
+              <div className="absolute top-5 left-1/2 z-40 flex -translate-x-1/2 rounded-full border border-white/30 bg-white/15 p-1 text-xs backdrop-blur">
+        <button
+          type="button"
+          onClick={() => setLanguage("es")}
+          className={`rounded-full px-4 py-2 transition ${
+            language === "es" ? "bg-white text-[#6E1F2D]" : "text-white"
+          }`}
+        >
+          Español
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setLanguage("en")}
+          className={`rounded-full px-4 py-2 transition ${
+            language === "en" ? "bg-white text-[#6E1F2D]" : "text-white"
+          }`}
+        >
+          English
+        </button>
+      </div>
         <div
           className="absolute inset-0 bg-cover bg-center scale-105"
           style={{ backgroundImage: `url(${mainPhoto})` }}
@@ -202,7 +327,7 @@ export default function App() {
         <div className="relative z-10 w-full max-w-md mx-auto text-center">
           <Reveal>
             <p className="uppercase tracking-[0.35em] text-xs mb-5 opacity-90">
-              Estás invitado/a
+              {t.invited}
             </p>
           </Reveal>
 
@@ -234,9 +359,9 @@ export default function App() {
             <div className="mx-auto mb-5 h-14 w-14 rounded-full bg-[#6E1F2D] text-white flex items-center justify-center">
               <Music size={24} />
             </div>
-            <h2 className="text-2xl font-serif mb-3">¡Dale Play y desliza!</h2>
+            <h2 className="text-2xl font-serif mb-3">{t.playTitle}</h2>
             <p className="text-sm leading-relaxed opacity-80 mb-6">
-              Escucha mi canción favorita.
+              {t.playText}
             </p>
             <button
               type="button"
@@ -261,9 +386,9 @@ export default function App() {
         <Reveal>
           <div className="text-center">
             <Sparkles className="mx-auto mb-5 text-[#D8B36A]" size={34} />
-            <h2 className="text-3xl font-serif mb-6">Una día especial</h2>
+            <h2 className="text-3xl font-serif mb-6">{t.specialDayTitle}</h2>
             <p className="text-base leading-8 opacity-90">
-              {invitation.welcomeText}
+              {t.specialDayText}
             </p>
           </div>
         </Reveal>
@@ -287,9 +412,9 @@ export default function App() {
           <div className="relative z-30 w-full max-w-md mx-auto">
             <Reveal>
               <Card className="text-center">
-                <h2 className="text-3xl font-serif mb-3">Falta poco</h2>
+                <h2 className="text-3xl font-serif mb-3">{t.countdownTitle}</h2>
                 <p className="text-sm opacity-70 mb-6">
-                  Para celebrar este día tan especial
+                  {t.countdownText}
                 </p>
                 <Countdown />
               </Card>
@@ -308,20 +433,20 @@ export default function App() {
         <Reveal>
           <Card className="text-center text-[#2B1A1E]">
             <MapPin className="mx-auto mb-4 text-[#6E1F2D]" size={34} />
-            <h2 className="text-3xl font-serif mb-4">Cuándo y dónde</h2>
+            <h2 className="text-3xl font-serif mb-4">{t.whenWhereTitle}</h2>
 
             <div className="space-y-3 text-sm leading-relaxed mb-7">
               <p>
-                <strong>Fecha:</strong> {invitation.displayDate}
+                <strong>{t.date}:</strong> {invitation.displayDate}
               </p>
               <p>
-                <strong>Hora:</strong> {invitation.time}
+                <strong>{t.time}:</strong> {invitation.time}
               </p>
               <p>
-                <strong>Lugar:</strong> {invitation.locationName}
+                <strong>{t.place}:</strong> {invitation.locationName}
               </p>
               <p>
-                <strong>Dirección:</strong> {invitation.address}
+                <strong>{t.address}:</strong> {invitation.address}
               </p>
             </div>
 
@@ -331,7 +456,7 @@ export default function App() {
               rel="noreferrer"
               className="inline-block rounded-full bg-[#6E1F2D] text-white px-7 py-3 text-sm"
             >
-              Ver ubicación
+              {t.viewLocation}
             </a>
           </Card>
         </Reveal>
@@ -355,12 +480,12 @@ export default function App() {
           <Reveal>
             <Card className="text-center">
               <Shirt className="mx-auto mb-4 text-[#6E1F2D]" size={34} />
-              <h2 className="text-3xl font-serif mb-4">Código de vestimenta</h2>
+              <h2 className="text-3xl font-serif mb-4">{t.dressCodeTitle}</h2>
               <p className="text-xl text-[#6E1F2D] font-semibold">
                 {invitation.dressCode}
               </p>
               <p className="mt-4 text-sm opacity-70 leading-relaxed">
-                {invitation.dressCodeNote}
+                {t.dressCodeNote}
               </p>
             </Card>
           </Reveal>
@@ -388,10 +513,10 @@ export default function App() {
           <Reveal>
             <Card className="text-center text-[#2B1A1E]">
               <h2 className="text-3xl font-serif mb-4">
-                Confirma tu asistencia
+                {t.confirmTitle}
               </h2>
               <p className="text-sm opacity-75 leading-relaxed mb-7">
-                {invitation.attendanceText}
+                {t.confirmText}
               </p>
 
               <div className="flex flex-col gap-3">
@@ -403,7 +528,7 @@ export default function App() {
                     rel="noreferrer"
                     className="inline-block rounded-full bg-[#6E1F2D] text-white px-7 py-3 text-sm"
                   >
-                    Confirmar con {contact.name}
+                    {t.confirmWith} {contact.name}
                   </a>
                 ))}
               </div>
@@ -416,12 +541,12 @@ export default function App() {
         <Reveal>
           <Card className="text-center">
             <Mail className="mx-auto mb-4 text-[#6E1F2D]" size={34} />
-            <h2 className="text-3xl font-serif mb-4">Regalos</h2>
+            <h2 className="text-3xl font-serif mb-4">{t.giftsTitle}</h2>
               <p className="text-sm opacity-75 leading-7 mb-3">
-                {invitation.giftsText}
+                {t.giftsText}
               </p>
               <p className="text-xl text-[#6E1F2D] font-semibold">
-                {invitation.giftsHighlight}
+                {t.giftsHighlight}
               </p>
           </Card>
         </Reveal>
@@ -446,13 +571,13 @@ export default function App() {
           <Reveal>
             <div>
               <p className="uppercase tracking-[0.35em] text-xs mb-5 opacity-80">
-                Gracias por acompañarme
+                {t.finalThanks}
               </p>
               <h2 className="text-5xl font-serif mb-5">
                 {invitation.mainName}
               </h2>
               <p className="text-sm opacity-80">
-                Te espero para celebrar un día inolvidable.
+                {t.finalText}
               </p>
             </div>
           </Reveal>
